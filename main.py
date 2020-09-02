@@ -21,6 +21,7 @@ def make_grid(rows,width):
     return grid
 
 
+# main loop
 if __name__ == '__main__':
     print('hello world')
     ROWS = 50
@@ -28,39 +29,19 @@ if __name__ == '__main__':
 
     run = True
 
-    UI_E = Menu.UIElement(
-        center_position= (400,400),
-        font_size=30,
-        bg_rgb=graphics.BLUE,
-        text_rgb=graphics.WHITE,
-        text="Hello World"
-    )
-
-    quit_btn = Menu.UIElement(
-        center_position=(400, 500),
-        font_size=30,
-        bg_rgb=graphics.BLUE,
-        text_rgb=graphics.WHITE,
-        text="Quit",
-        action = Menu.GameState.QUIT
-    )
-
-    while run :
-        mouse_up = False
+    game_state = Menu.GameState.TITLE
+    run = True
+    while run:
         for event in pygame.event.get():
-            if event.type == pygame.MOUSEBUTTONUP and event.button == 1:
-                mouse_up = True
-            pass
-        WIN.fill(graphics.BLUE)
+            if game_state == Menu.GameState.TITLE:
+                player = Menu.Player()
+                game_state = Menu.title_screen(WIN)
 
-        ui_action = quit_btn.update(pygame.mouse.get_pos(), mouse_up)
-        if ui_action is not None or event.type ==pygame.QUIT:
-            run = False
-        quit_btn.draw(WIN)
-        pygame.display.flip()
+            if game_state == Menu.GameState.LEVEL_SELECT_PAGE_ONE:
+                player.current_level = 1
+                game_state = Menu.menu_one(WIN,player)
 
+            if game_state == Menu.GameState.QUIT or event.type == pygame.QUIT:
+                run = False
 
     pygame.quit()
-
-
-
